@@ -32,3 +32,9 @@ module.exports.getProduct = (req, res) => {
         .then(products => res.json(products))
         .catch(err => res.sjon(err));
 }
+
+module.exports.editProduct = (req,res)=> {
+    Product.findOneAndUpdate({_id: req.params.id}, req.body, {new:true})
+            .then(editProduct => res.json(editProduct))
+            .catch(err => res.json(err))
+}
