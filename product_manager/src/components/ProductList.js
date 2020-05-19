@@ -1,35 +1,33 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import {Link} from '@reach/router';
 
-const Product =({products, setProducts})=> {
+
+const ProductList =({products, setProducts, removeFromDom})=> {
     const  productClick = (e, item)=>{
             setProducts(item.products);
+    }
+
+    const deleteProduct = (productId) => {
+        axios.delete('http://localhost:8001/api/products/' + productId)
+            .then(res => {
+                removeFromDom(productId)
+            })
     }
         return (
             <div className="row">
                 <div className="col-sm">
                     <ul className="list-unstyled">
                         {products.map((product, i) => {
-                            return <li><Link to ={`/products/${product._id}`} key = {i}>{product.title}</Link></li>
+                            return <li key = {i}>
+                                <Link to ={`/products/${product._id}`}>{product.title}</Link>
+                                |
+                                <button onClick= {(e) => {deleteProduct(product._id)}}>Delete</button>
+                                </li>
                         })}
                     </ul>
                 </div>
             </div>
         )
 }
-export default Product;
-
-// export default props => {
-//     console.log(props)
-//     const productClick = (e,item) => {
-//         setProducts(item.products);
-
-//     }
-//     return (
-//         <div>
-//             {props.products.map((product, i) => {
-//                 return <li onClick ={ (e) => productClick(e,item) } style ={{display : "inline"}} key = {i}>{product.title}</li>
-//             })}
-//         </div>
-//     )
-// }
+export default ProductList;
