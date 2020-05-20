@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import {Link} from '@reach/router';
+import DeleteProduct from './DeleteProduct';
 
 
 const ProductList =({products, setProducts, removeFromDom})=> {
@@ -8,12 +9,6 @@ const ProductList =({products, setProducts, removeFromDom})=> {
             setProducts(item.products);
     }
 
-    const deleteProduct = (productId) => {
-        axios.delete('http://localhost:8001/api/products/' + productId)
-            .then(res => {
-                removeFromDom(productId)
-            })
-    }
         return (
             <div className="row">
                 <div className="col-sm">
@@ -22,7 +17,7 @@ const ProductList =({products, setProducts, removeFromDom})=> {
                             return <li key = {i}>
                                 <Link to ={`/products/${product._id}`}>{product.title}</Link>
                                 |
-                                <button onClick= {(e) => {deleteProduct(product._id)}}>Delete</button>
+                                <DeleteProduct productId = {product._id} successCallback = {() => removeFromDom(product._id)}/>
                                 </li>
                         })}
                     </ul>
